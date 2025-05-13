@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us - Green Saver Market</title>
+  <style>
+    
+    body {
+
+    <div id="header"></div>
+<!-- Your Contact Page Sections Here -->
+<div id="footer"></div>
+
+
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background: #f7f9f8;
+      color: #333;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 2rem;
+      gap: 2rem;
+    }
+
+    .contact-form {
+      flex: 2;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    .contact-info {
+      flex: 1;
+      background: #e8f5e9;
+      padding: 2rem;
+      border-radius: 10px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    select option[disabled] {
+      display: none;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    h2, h3 {
+      margin-top: 0;
+    }
+
+    .faq, .map {
+      padding: 2rem;
+      background: white;
+      margin: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    .faq-item {
+      margin-bottom: 1rem;
+    }
+
+    iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<script>
+  fetch('header.html')
+    .then(res => res.text())
+    .then(data => document.getElementById('header').innerHTML = data);
+
+  fetch('footer.html')
+    .then(res => res.text())
+    .then(data => document.getElementById('footer').innerHTML = data);
+</script>
+
+<body>
+
+  <section class="container">
+    <!-- Contact Form -->
+    <div class="contact-form">
+      <h2>Contact Us</h2>
+      <form>
+        <label for="name">Name *</label>
+        <input type="text" id="name" name="name" required />
+
+        <label for="email">Email *</label>
+        <input type="email" id="email" name="email" required />
+
+        <label for="subject">Subject *</label>
+        <input type="text" id="subject" name="subject" required />
+
+        <label for="option">How can we help you?</label>
+        <select id="option" name="option" required>
+          <option value="" disabled selected>Select an option</option>
+          <option value="order">Order Enquiry</option>
+          <option value="product">Product Question</option>
+          <option value="feedback">Feedback</option>
+          <option value="other">Other</option>
+        </select>
+
+        <label for="message">Message *</label>
+        <textarea id="message" name="message" rows="5" required></textarea>
+
+        <button type="submit">Send Message</button>
+      </form>
+    </div>
+
+    <!-- Contact Information -->
+    <div class="contact-info">
+      <h3>Contact Information</h3>
+      <p><strong>Address</strong><br>123 Nature Lane<br>Ruaka, KE 254254</p>
+      <p><strong>Phone</strong><br>(555) 123-4567</p>
+      <p><strong>Email</strong><br>info@greensavermarket.com</p>
+      <p><strong>Business Hours</strong><br>
+        Monday - Friday: 9AM - 8PM<br>
+        Saturday: 9AM - 6PM<br>
+        Sunday: 10AM - 4PM
+      </p>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+      <h4>Do you offer delivery?</h4>
+      <p>Yes, we offer delivery within a 15-mile radius. Orders placed before 2PM can be delivered the same day.</p>
+    </div>
+
+    <div class="faq-item">
+      <h4>How fresh is your produce?</h4>
+      <p>We source directly from local farms daily. Most produce is harvested within 24 hours of delivery to you.</p>
+    </div>
+
+    <div class="faq-item">
+      <h4>Can I return items?</h4>
+      <p>If you're not satisfied with the quality of your purchase, we offer a 100% satisfaction guarantee.</p>
+    </div>
+  </section>
+
+  <!-- Google Map Section -->
+  <section class="map">
+    <h2>Find Us on the Map</h2>
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.315644982131!2d-122.42177868468133!3d37.77492977975865!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085809cbbb9e4f7%3A0xc2a486f5e4e1aabc!2s123%20Nature%20Lane%2C%20Greenville%2C%20CA%2094123!5e0!3m2!1sen!2sus!4v1617036554970!5m2!1sen!2sus"
+      allowfullscreen=""
+      loading="lazy"
+    ></iframe>
+  </section>
+
+</body>
+</html>

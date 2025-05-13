@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Our Products - Green Saver Market</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .bg-gs-green { background-color: #166534; }
+    .text-gs-green { color: #166534; }
+    .bg-gs-green-light { background-color: #22c55e; }
+    .bg-gs-green-badge { background-color: #bbf7d0; }
+    .text-gs-green-badge { color: #166534; }
+    .bg-page { background-color: #faf7ee; }
+    .border-gs-green { border-color: #166534; }
+  </style>
+</head>
+<body class="bg-page min-h-screen flex flex-col">
+
+  <!-- Header placeholder -->
+  <div id="header"></div>
+
+  <main class="container mx-auto px-4 py-8 flex-grow">
+    <h1 class="text-2xl sm:text-3xl font-bold mb-4 text-gs-green">Our Products</h1>
+    <div class="flex flex-col md:flex-row md:space-x-8">
+      <!-- Sidebar -->
+      <aside class="md:w-64 w-full mb-6 md:mb-0">
+        <div class="mb-6">
+          <h2 class="text-base font-semibold mb-3">Categories</h2>
+          <div class="flex flex-wrap md:flex-col gap-2">
+            <button onclick="filterByCategory('All')" class="category-btn px-3 py-1 rounded bg-gs-green-light text-white text-sm font-medium focus:outline-none">All</button>
+            <button onclick="filterByCategory('Vegetables')" class="category-btn px-3 py-1 rounded bg-gray-200 text-gray-800 text-sm font-medium focus:outline-none">Vegetables</button>
+            <button onclick="filterByCategory('Fruits')" class="category-btn px-3 py-1 rounded bg-gray-200 text-gray-800 text-sm font-medium focus:outline-none">Fruits</button>
+            <button onclick="filterByCategory('Dairy')" class="category-btn px-3 py-1 rounded bg-gray-200 text-gray-800 text-sm font-medium focus:outline-none">Dairy</button>
+            <button onclick="filterByCategory('Bakery')" class="category-btn px-3 py-1 rounded bg-gray-200 text-gray-800 text-sm font-medium focus:outline-none">Bakery</button>
+          </div>
+        </div>
+        <div class="bg-white rounded p-4 text-sm shadow">
+          <h3 class="font-semibold mb-2">Shopping Info</h3>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>We offer free delivery for orders over $50 within a 15 mile radius.</li>
+            <li>All produce is harvested fresh to ensure maximum nutrition and flavor.</li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- Products Section -->
+      <section class="flex-1">
+        <div class="product-card bg-white rounded-lg shadow-md border border-gray-200 flex flex-col"></div>
+        <!-- Search and count -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
+          <div class="relative w-full sm:w-96">
+            <input id="searchInput" type="text" placeholder="Search products..." class="w-full pl-10 pr-4 py-2 rounded border border-gray-300 focus:border-gs-green focus:ring-1 focus:ring-gs-green outline-none" oninput="filterProducts()" />
+            <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </div>
+          <div id="productCount" class="text-gray-600 text-sm mt-2 sm:mt-0">All Products (12)</div>
+        </div>
+        <!-- Product Grid -->
+        <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <!-- Products Card -->
+          <!-- Organic Carrots -->
+  <div class="product-card bg-white rounded-lg shadow-md border border-gray-200 flex flex-col" data-category="Vegetables">
+    <img src="images/carrot.jpg" alt="Organic Carrots" class="w-full h-40 object-cover rounded-t-lg">
+    <div class="p-4 flex flex-col flex-grow">
+      <div class="flex items-center justify-between mb-1">
+        <h3 class="font-semibold text-lg">Organic Carrots</h3>
+        <span class="bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded">Organic</span>
+      </div>
+      <div class="text-gray-500 text-sm mb-3">bunch</div>
+      <div class="text-xl font-bold mb-4">$2.99</div>
+      <button class="mt-auto bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition flex justify-center items-center gap-2">
+        <!-- SVG Icon -->
+        Add
+      </button>
+    </div>
+  </div>
+
+  <!-- Red Apples -->
+<div class="product-card bg-white rounded-lg shadow-md border border-gray-200 flex flex-col" data-category="Fruits">
+  <!-- Product Image -->
+  <img src="images/apple.jpg" alt="Red Apples" class="w-full h-40 object-cover rounded-t-lg">
+
+  <div class="p-4 flex flex-col flex-grow">
+    <div class="flex items-center justify-between mb-1">
+      <h3 class="font-semibold text-lg">Red Apples</h3>
+      <span class="bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded">Organic</span>
+    </div>
+    <div class="text-gray-500 text-sm mb-3">lb</div>
+    <div class="text-xl font-bold mb-4">$3.49</div>
+    <button class="mt-auto bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition flex justify-center items-center gap-2">
+      Add
+    </button>
+  </div>
+</div>
+
+
+  <!-- Avocados -->
+  <div class="product-card bg-white rounded-lg shadow-md border border-gray-200 flex flex-col" data-category="Fruits">
+    <img src="images/avocado.jpg" alt="Avocados" class="w-full h-40 object-cover rounded-t-lg">
+    <div class="p-4 flex flex-col flex-grow">
+      <div class="flex items-center justify-between mb-1">
+        <h3 class="font-semibold text-lg">Avocados</h3>
+        <span class="bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded">Organic</span>
+      </div>
+      <div class="text-gray-500 text-sm mb-3">each</div>
+      <div class="text-xl font-bold mb-4">$2.99</div>
+      <button class="mt-auto bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition flex justify-center items-center gap-2">
+        Add
+      </button>
+    </div>
+  </div>
+
+  <!-- Organic Spinach -->
+  <div class="product-card bg-white rounded-lg shadow-md border border-gray-200 flex flex-col" data-category="Vegetables">
+    <img src="images/spinach.jpg" alt="Organic Spinach" class="w-full h-40 object-cover rounded-t-lg">
+    <div class="p-4 flex flex-col flex-grow">
+      <div class="flex items-center justify-between mb-1">
+        <h3 class="font-semibold text-lg">Organic Spinach</h3>
+        <span class="bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded">Organic</span>
+      </div>
+      <div class="text-gray-500 text-sm mb-3">bag</div>
+      <div class="text-xl font-bold mb-4">$3.99</div>
+      <button class="mt-auto bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition flex justify-center items-center gap-2">
+        Add
+      </button>
+    </div>
+  </div>
+
+  <!-- Organic Eggs -->
+  <div class="product-card bg-white rounded-lg shadow-md border border-gray-200 flex flex-col" data-category="Dairy">
+    <img src="images/egg.jpg" alt="Organic Egg" class="w-full h-40 object-cover rounded-t-lg">
+    <div class="p-4 flex flex-col flex-grow">
+      <div class="flex items-center justify-between mb-1">
+        <h3 class="font-semibold text-lg">Organic Eggs</h3>
+        <span class="bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded">Organic</span>
+      </div>
+      <div class="text-gray-500 text-sm mb-3">dozen</div>
+      <div class="text-xl font-bold mb-4">$5.99</div>
+      <button class="mt-auto bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition flex justify-center items-center gap-2">
+        Add
+      </button>
+    </div>
+  </div>
+
+  <!-- Milk -->
+  <div class="product-card bg-white rounded-lg shadow-md border border-gray-200 flex flex-col" data-category="Dairy">
+    <img src="images/milk.jpg" alt="Milk" class="w-full h-40 object-cover rounded-t-lg">
+    <div class="p-4 flex flex-col flex-grow">
+      <div class="flex items-center justify-between mb-1">
+        <h3 class="font-semibold text-lg">Milk</h3>
+      </div>
+      <div class="text-gray-500 text-sm mb-3">gallon</div>
+      <div class="text-xl font-bold mb-4">$4.49</div>
+      <button class="mt-auto bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition flex justify-center items-center gap-2">
+        Add
+      </button>
+    </div>
+  </div>
+
+  <!-- Organic Bananas -->
+  <div class="product-card bg-white rounded-lg shadow-md border border-gray-200 flex flex-col" data-category="Fruits">
+    <img src="images/banana.jpg" alt="Organic Bananas" class="w-full h-40 object-cover rounded-t-lg">
+    <div class="p-4 flex flex-col flex-grow">
+      <div class="flex items-center justify-between mb-1">
+        <h3 class="font-semibold text-lg">Organic Bananas</h3>
+        <span class="bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded">Organic</span>
+      </div>
+      <div class="text-gray-500 text-sm mb-3">bunch</div>
+      <div class="text-xl font-bold mb-4">$1.99</div>
+      <button class="mt-auto bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition flex justify-center items-center gap-2">
+        Add
+      </button>
+    </div>
+  </div>
+
+  <!-- Organic Kale -->
+  <div class="product-card bg-white rounded-lg shadow-md border border-gray-200 flex flex-col" data-category="Vegetables">
+    <img src="images/kales.jpg" alt="Organic Kale" class="w-full h-40 object-cover rounded-t-lg">
+    <div class="p-4 flex flex-col flex-grow">
+      <div class="flex items-center justify-between mb-1">
+        <h3 class="font-semibold text-lg">Organic Kale</h3>
+        <span class="bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded">Organic</span>
+      </div>
+      <div class="text-gray-500 text-sm mb-3">bunch</div>
+      <div class="text-xl font-bold mb-4">$3.29</div>
+      <button class="mt-auto bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition flex justify-center items-center gap-2">
+        Add
+      </button>
+    </div>
+  </div>
+
+  <!-- Bell Peppers -->
+  <div class="product-card bg-white rounded-lg shadow-md border border-gray-200 flex flex-col" data-category="Vegetables">
+    <img src="images/pepper.jpg" alt="Organic Bell Peppers" class="w-full h-40 object-cover rounded-t-lg">
+    <div class="p-4 flex flex-col flex-grow">
+      <div class="flex items-center justify-between mb-1">
+        <h3 class="font-semibold text-lg">Bell Peppers</h3>
+      </div>
+      <div class="text-gray-500 text-sm mb-3">each</div>
+      <div class="text-xl font-bold mb-4">$1.49</div>
+      <button class="mt-auto bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition flex justify-center items-center gap-2">
+        Add
+      </button>
+    </div>
+  </div>
+
+  <!-- Organic Blueberries -->
+  <div class="product-card bg-white rounded-lg shadow-md border border-gray-200 flex flex-col" data-category="Fruits">
+    <img src="images/berries.jpg" alt="Organic Blueberries" class="w-full h-40 object-cover rounded-t-lg">
+    <div class="p-4 flex flex-col flex-grow">
+      <div class="flex items-center justify-between mb-1">
+        <h3 class="font-semibold text-lg">Organic Blueberries</h3>
+        <span class="bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded">Organic</span>
+      </div>
+      <div class="text-gray-500 text-sm mb-3">pint</div>
+      <div class="text-xl font-bold mb-4">$4.99</div>
+      <button class="mt-auto bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition flex justify-center items-center gap-2">
+        Add
+      </button>
+    </div>
+  </div>
+
+  <!-- Whole Wheat Bread -->
+  <div class="product-card bg-white rounded-lg shadow-md border border-gray-200 flex flex-col" data-category="Bakery">
+    <img src="images/wheat.jpg" alt="Whole Wheat Bread" class="w-full h-40 object-cover rounded-t-lg">
+    <div class="p-4 flex flex-col flex-grow">
+      <div class="flex items-center justify-between mb-1">
+        <h3 class="font-semibold text-lg">Whole Wheat Bread</h3>
+      </div>
+      <div class="text-gray-500 text-sm mb-3">loaf</div>
+      <div class="text-xl font-bold mb-4">$3.99</div>
+      <button class="mt-auto bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition flex justify-center items-center gap-2">
+        Add
+      </button>
+    </div>
+  </div>
+
+  <!-- Organic Potatoes -->
+  <div class="product-card bg-white rounded-lg shadow-md border border-gray-200 flex flex-col" data-category="Vegetables">
+    <img src="images/potatoe.jpg" alt="Organic Potatoes" class="w-full h-40 object-cover rounded-t-lg">
+    <div class="p-4 flex flex-col flex-grow">
+      <div class="flex items-center justify-between mb-1">
+        <h3 class="font-semibold text-lg">Organic Potatoes</h3>
+        <span class="bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded">Organic</span>
+      </div>
+      <div class="text-gray-500 text-sm mb-3">lb</div>
+      <div class="text-xl font-bold mb-4">$2.49</div>
+      <button class="mt-auto bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition flex justify-center items-center gap-2">
+        Add
+      </button>
+    </div>
+  </div>
+
+</div>
+         
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer placeholder -->
+  <div id="footer"></div>
+ <script>
+  function filterByCategory(category) {
+    const products = document.querySelectorAll('.product-card');
+    const categoryButtons = document.querySelectorAll('.category-btn');
+
+    // Update active button styling
+    categoryButtons.forEach(btn => {
+      if (btn.textContent === category || (category === 'All' && btn.textContent === 'All')) {
+        btn.classList.add('bg-gs-green-light', 'text-white');
+        btn.classList.remove('bg-gray-200', 'text-gray-800');
+      } else {
+        btn.classList.remove('bg-gs-green-light', 'text-white');
+        btn.classList.add('bg-gray-200', 'text-gray-800');
+      }
+    });
+
+    // Show/hide products based on category
+    let visibleCount = 0;
+    products.forEach(product => {
+      const productCategory = product.getAttribute('data-category');
+      if (category === 'All' || productCategory === category) {
+        product.style.display = '';
+        visibleCount++;
+      } else {
+        product.style.display = 'none';
+      }
+    });
+
+    // Update product count display
+    const countElement = document.getElementById('productCount');
+    if (countElement) {
+      countElement.textContent = `${category === 'All' ? 'All Products' : category} (${visibleCount})`;
+    }
+  }
+
+  // Initialize with all products shown
+  document.addEventListener('DOMContentLoaded', () => {
+    filterByCategory('All');
+  });
+</script>
+
+
+  <script>
+    // Load external header and footer
+    function loadHTML(id, url) {
+      fetch(url)
+        .then(response => response.text())
+        .then(data => { document.getElementById(id).innerHTML = data; });
+    }
+    loadHTML('header', 'header.html');
+    loadHTML('footer', 'footer.html');
+
+    // Filtering logic
+    // Removed duplicate declaration of currentCategory
+    function filterByCategory(category) {
+      currentCategory = category;
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.classList.remove('bg-gs-green-light', 'text-white');
+        btn.classList.add('bg-gray-200', 'text-gray-800');
+        if (btn.textContent === category) {
+          btn.classList.add('bg-gs-green-light', 'text-white');
+          btn.classList.remove('bg-gray-200', 'text-gray-800');
+        }
+      });
+      filterProducts();
+    }
+    function filterProducts() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      let visibleCount = 0;
+      document.querySelectorAll('.product-card').forEach(card => {
+        const title = card.querySelector('.font-semibold').textContent.toLowerCase();
+        const category = card.getAttribute('data-category');
+        const matchesCategory = (currentCategory === 'All' || category === currentCategory);
+        const matchesSearch = title.includes(searchTerm);
+        if (matchesCategory && matchesSearch) {
+          card.style.display = '';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      document.getElementById('productCount').textContent = 
+        (currentCategory === 'All' ? 'All Products' : currentCategory) + ` (${visibleCount})`;
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      filterByCategory('All');
+    });
+  </script>
+
+  <script>
+  function filterByCategory(category) {
+    const cards = document.querySelectorAll('.product-card');
+    const productCountText = document.getElementById('productCount');
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const cardCategory = card.getAttribute('data-category');
+      const matches = category === 'All' || cardCategory === category;
+
+      card.style.display = matches ? 'flex' : 'none';
+      if (matches) visibleCount++;
+    });
+
+    // Update product count text
+    productCountText.textContent = `${category === 'All' ? 'All Products' : category} (${visibleCount})`;
+
+    // Update active button styles
+    document.querySelectorAll('.category-btn').forEach(btn => {
+      btn.classList.remove('bg-gs-green-light', 'text-white');
+      btn.classList.add('bg-gray-200', 'text-gray-800');
+    });
+
+    const activeBtn = Array.from(document.querySelectorAll('.category-btn')).find(btn => btn.textContent.trim() === category);
+    if (activeBtn) {
+      activeBtn.classList.remove('bg-gray-200', 'text-gray-800');
+      activeBtn.classList.add('bg-gs-green-light', 'text-white');
+    }
+  }
+
+  // Initial filter on page load
+  window.onload = () => {
+    filterByCategory('All');
+  };
+</script>
+
+<script>
+  function filterProducts() {
+    const searchValue = document.getElementById('searchInput').value.toLowerCase();
+    const productCards = document.querySelectorAll('.product-card');
+    let visibleCount = 0;
+
+    productCards.forEach(card => {
+      const name = card.querySelector('h3').textContent.toLowerCase();
+      const matchesSearch = name.includes(searchValue);
+      const matchesCategory = currentCategory === 'All' || card.dataset.category === currentCategory;
+
+      if (matchesSearch && matchesCategory) {
+        card.style.display = 'flex';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    document.getElementById('productCount').textContent = `${currentCategory} Products (${visibleCount})`;
+  }
+
+  let currentCategory = 'All';
+
+  function filterByCategory(category) {
+    currentCategory = category;
+
+    // Update button styles
+    const buttons = document.querySelectorAll('.category-btn');
+    buttons.forEach(btn => {
+      if (btn.textContent === category) {
+        btn.classList.remove('bg-gray-200', 'text-gray-800');
+        btn.classList.add('bg-gs-green-light', 'text-white');
+      } else {
+        btn.classList.remove('bg-gs-green-light', 'text-white');
+        btn.classList.add('bg-gray-200', 'text-gray-800');
+      }
+    });
+
+    // Re-run product filter
+    filterProducts();
+  }
+
+  // Run on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    filterProducts(); // Ensure count is correct on load
+  });
+</script>
+
+<script>
+  const products = document.querySelectorAll('.product-card');
+  const productCount = document.getElementById('productCount');
+  const searchInput = document.getElementById('searchInput');
+  const cart = [];
+
+  function filterByCategory(category) {
+    products.forEach(product => {
+      const productCategory = product.getAttribute('data-category');
+      const matchesCategory = (category === 'All' || productCategory === category);
+      const matchesSearch = product.textContent.toLowerCase().includes(searchInput.value.toLowerCase());
+
+      if (matchesCategory && matchesSearch) {
+        product.classList.remove('hidden');
+      } else {
+        product.classList.add('hidden');
+      }
+    });
+
+    updateProductCount();
+    highlightCategory(category);
+  }
+
+  function filterProducts() {
+    const searchText = searchInput.value.toLowerCase();
+
+    products.forEach(product => {
+      const productText = product.textContent.toLowerCase();
+      const matchesSearch = productText.includes(searchText);
+      const selectedCategory = document.querySelector('.category-btn.bg-gs-green-light')?.textContent || 'All';
+      const productCategory = product.getAttribute('data-category');
+      const matchesCategory = (selectedCategory === 'All' || productCategory === selectedCategory);
+
+      if (matchesSearch && matchesCategory) {
+        product.classList.remove('hidden');
+      } else {
+        product.classList.add('hidden');
+      }
+    });
+
+    updateProductCount();
+  }
+
+  function updateProductCount() {
+    const visibleProducts = [...products].filter(p => !p.classList.contains('hidden')).length;
+    const selectedCategory = document.querySelector('.category-btn.bg-gs-green-light')?.textContent || 'All';
+    productCount.textContent = `${selectedCategory} Products (${visibleProducts})`;
+  }
+
+  function highlightCategory(selectedCategory) {
+    document.querySelectorAll('.category-btn').forEach(btn => {
+      if (btn.textContent === selectedCategory) {
+        btn.classList.add('bg-gs-green-light', 'text-white');
+        btn.classList.remove('bg-gray-200', 'text-gray-800');
+      } else {
+        btn.classList.remove('bg-gs-green-light', 'text-white');
+        btn.classList.add('bg-gray-200', 'text-gray-800');
+      }
+    });
+  }
+
+  // Add to cart logic (basic)
+  document.querySelectorAll('.product-card button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const product = btn.closest('.product-card');
+      const title = product.querySelector('h3').textContent;
+      const price = parseFloat(product.querySelector('.text-xl').textContent.replace('$', ''));
+      cart.push({ title, price });
+      alert(`${title} added to cart. Total items: ${cart.length}`);
+    });
+  });
+
+  // Init on load
+  document.addEventListener('DOMContentLoaded', () => {
+    filterByCategory('All');
+  });
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // Helper: Get cart from localStorage
+  function getCart() {
+    return JSON.parse(localStorage.getItem('cart') || '[]');
+  }
+  // Helper: Save cart to localStorage
+  function saveCart(cart) {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
+
+  // Add event listeners to all Add buttons
+  document.querySelectorAll('.product-card').forEach(function(card) {
+    const btn = card.querySelector('button');
+    btn.addEventListener('click', function () {
+      const name = card.querySelector('h3').textContent.trim();
+      const priceText = card.querySelector('.text-xl.font-bold').textContent.trim();
+      const price = parseFloat(priceText.replace('$', ''));
+      // Use name as id for simplicity (better: use a unique id if available)
+      const id = name;
+
+      // Get current cart
+      let cart = getCart();
+      // Check if product is already in cart
+      let item = cart.find(p => p.id === id);
+      if (item) {
+        item.quantity += 1;
+      } else {
+        cart.push({ id, name, price, quantity: 1 });
+      }
+      saveCart(cart);
+
+      // Give user feedback
+      btn.textContent = "Added!";
+      btn.disabled = true;
+      setTimeout(() => {
+        btn.textContent = "Add";
+        btn.disabled = false;
+      }, 1000);
+    });
+  });
+});
+</script>
+
+<script>
+  // Utility: Get and set cart in localStorage
+  function getCart() {
+    return JSON.parse(localStorage.getItem('cart') || '[]');
+  }
+  function saveCart(cart) {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
+
+  // Update the cart count badge in the navbar
+  function updateCartCount() {
+    const cart = getCart();
+    const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const badge = document.getElementById('cart-count');
+    if (badge) {
+      badge.textContent = count;
+      badge.style.display = count > 0 ? 'flex' : 'none';
+    }
+  }
+
+  // Add product to cart
+  function addToCart(product) {
+    let cart = getCart();
+    const existing = cart.find(item => item.name === product.name);
+    if (existing) {
+      existing.quantity++;
+    } else {
+      cart.push({ ...product, quantity: 1 });
+    }
+    saveCart(cart);
+    updateCartCount();
+    // Optional: Give user feedback
+    // alert(product.name + " added to cart!");
+  }
+
+  // Attach event listeners to all "Add" buttons
+  document.addEventListener('DOMContentLoaded', function() {
+    // For each product card
+    document.querySelectorAll('.product-card').forEach(card => {
+      const btn = card.querySelector('button');
+      if (btn) {
+        btn.addEventListener('click', function() {
+          const name = card.querySelector('h3').textContent.trim();
+          const priceText = card.querySelector('.text-xl.font-bold').textContent.trim();
+          const price = parseFloat(priceText.replace('$', ''));
+          // Optional: get image src
+          const img = card.querySelector('img');
+          const image = img ? img.getAttribute('src') : '';
+          addToCart({ name, price, image });
+          // Optional: visual feedback
+          btn.textContent = "Added!";
+          btn.disabled = true;
+          setTimeout(() => {
+            btn.textContent = "Add";
+            btn.disabled = false;
+          }, 1000);
+        });
+      }
+    });
+    // Show correct cart count on page load
+    updateCartCount();
+  });
+</script>
+
+</body>
+</html>

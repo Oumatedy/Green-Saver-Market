@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Shopping Cart</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-4">
+
+  <div class="max-w-4xl mx-auto bg-white p-6 rounded shadow">
+    <h1 class="text-2xl font-bold mb-6 text-green-700">Shopping Cart</h1>
+    <div id="cartContent"></div>
+  </div>
+
+  <script>
+    const cartKey = 'cart';
+    let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+
+    const cartContent = document.getElementById('cartContent');
+
+    function saveCart() {
+      localStorage.setItem(cartKey, JSON.stringify(cart));
+    }
+
+    function updateCart() {
+      if (cart.length === 0) {
+        cartContent.innerHTML = `
+          <div class="text-center">
+            <p class="text-lg text-gray-600 mb-4">Your cart is empty.</p>
+            <a href="products.html" class="bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700">Continue Shopping</a>
+          </div>
+        `;
+        return;
+      }
+
+      let rows = cart.map((item, index) => `
+        <tr class="border-b">
+          <td class="py-2">${item.name}</td>
+          <td class="py-2 text-center">
+            <button onclick="changeQty(${index}, -1)" class="px-2 text-red-500 font-bold">−</button>
+            ${item.quantity}
+            <button onclick="changeQty(${index}, 1)" class="px-2 text-green-600 font-bold">+</button>
+          </td>
+          <td class="py-2 text-right">$${(item.price * item.quantity).toFixed(2)}</td>
+          <td class="py-2 text-center">
+            <button onclick="removeItem(${index})" class="text-sm text-red-500 hover:underline">Remove</button>
+          </td>
+        </tr>
+      `).join('');
+
+      let subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      let total = subtotal; // You can add tax/shipping calculations here
+
+      cartContent.innerHTML = `
+        <table class="w-full text-left mb-6">
+          <thead>
+            <tr class="border-b font-semibold text-gray-700">
+              <th class="py-2">Product</th>
+              <th class="py-2 text-center">Quantity</th>
+              <th class="py-2 text-right">Subtotal</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+
+        <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
+          <button onclick="clearCart()" class="text-sm text-red-600 hover:underline">Clear Cart</button>
+          <div class="text-right">
+            <p class="text-gray-700">Subtotal: <span class="font-semibold">$${subtotal.toFixed(2)}</span></p>
+            <p class="text-gray-700">Total: <span class="font-semibold text-lg">$${total.toFixed(2)}</span></p>
+          </div>
+        </div>
+
+        <div class="flex justify-between flex-wrap gap-4">
+          <a href="products.html" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">Continue Shopping</a>
+          <a href="checkout.html" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Proceed to Checkout</a>
+        </div>
+      `;
+    }
+
+    function changeQty(index, delta) {
+      cart[index].quantity += delta;
+      if (cart[index].quantity <= 0) cart.splice(index, 1);
+      saveCart();
+      updateCart();
+    }
+
+    function removeItem(index) {
+      cart.splice(index, 1);
+      saveCart();
+      updateCart();
+    }
+
+    function clearCart() {
+      if (confirm('Are you sure you want to clear the entire cart?')) {
+        cart = [];
+        saveCart();
+        updateCart();
+      }
+    }
+
+    // Initial render
+    updateCart();
+  </script>
+
+</body>
+</html>
