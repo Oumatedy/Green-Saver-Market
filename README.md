@@ -11,7 +11,7 @@ An **e-commerce platform** for fresh, organic, and locally sourced farm produce�
 
 ## 🚀 Live Demo
 
-Try out the application at **[greensavermarket.lovable.app](https://greensavermarket.lovable.app)**.
+Try out the application at **[https://green-saver-market.netlify.app/)**.
 
 ## ✨ Features
 
