@@ -6,15 +6,16 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const compression = require('compression');
 const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss-clean');
+const { xss } = require('express-xss-sanitizer');
 const { rateLimit } = require('express-rate-limit');
 
 const app = express();
+const apiRouter = express.Router();
 
 // Security middleware
-app.use(helmet()); // Set security HTTP headers
-app.use(mongoSanitize()); // Prevent NoSQL injection
-app.use(xss()); // Prevent cross-site scripting attacks
+app.use(helmet());                 // Set security HTTP headers
+app.use(mongoSanitize());          // Prevent NoSQL injection
+app.use(xss());                    // Prevent XSS attacks using maintained sanitizer
 
 // CORS configuration
 app.use(cors({
@@ -38,16 +39,15 @@ if (process.env.NODE_ENV === 'development') {
 
 // Rate limiting middleware to limit repeated requests
 const limiter = rateLimit({
-  max: 100, // max requests per IP
-  windowMs: 60 * 60 * 1000, // 1 hour window
+  max: 100,                     // max requests per IP
+  windowMs: 60 * 60 * 1000,     // 1 hour window
   message: 'Too many requests from this IP, please try again after an hour!',
 });
 
 // Apply rate limiter to API routes
 app.use('/api/', limiter);
 
-// Define API routes (should be imported from routes folder)
-const apiRouter = express.Router();
+// Define API routes with versioning
 app.use('/api/v1', apiRouter);
 
 // Import and mount route files
@@ -66,5 +66,4 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Export the app instance for server.js to import
 module.exports = app;

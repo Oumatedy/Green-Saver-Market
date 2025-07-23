@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// Mongoose event listeners for connection status
+// Connection event logging
 mongoose.connection.on('connected', () => {
   console.log('MongoDB connection established');
 });
@@ -13,7 +13,7 @@ mongoose.connection.on('disconnected', () => {
   console.log('MongoDB connection disconnected');
 });
 
-// Handle process termination
+// Graceful shutdown handler
 process.on('SIGINT', async () => {
   try {
     await mongoose.connection.close();
