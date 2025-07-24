@@ -1,11 +1,11 @@
-const adminMiddleware = async (req, res, next) => {
+const adminMiddleware = (req, res, next) => {
   try {
     if (!req.user || req.user.role !== 'admin') {
       return res.status(403).json({ message: 'Admin access required' });
     }
     next();
   } catch (error) {
-    res.status(403).json({ message: 'Not authorized as admin' });
+    next(error);
   }
 };
 

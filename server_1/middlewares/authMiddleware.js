@@ -1,4 +1,4 @@
-const { verifySession } = require('@clerk/clerk-sdk-node');
+const { verifySession } = require('@clerk/express');
 const User = require('../models/userModel');
 const { UnauthorizedError } = require('../utils/AppError');
 
@@ -7,30 +7,25 @@ const { UnauthorizedError } = require('../utils/AppError');
  */
 const authMiddleware = async (req, res, next) => {
   try {
-    // Get token from header
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
       throw new UnauthorizedError('No token provided');
     }
 
-    // Verify token with Clerk
     const session = await verifySession(token);
     if (!session) {
       throw new UnauthorizedError('Invalid token');
     }
 
-    // Get user from database
     const user = await User.findOne({ clerkId: session.userId });
     if (!user) {
       throw new UnauthorizedError('User not found');
     }
 
-    // Check if user is active
     if (user.status !== 'active') {
       throw new UnauthorizedError('Account is not active');
     }
 
-    // Add user info to request
     req.user = {
       userId: user._id,
       clerkId: user.clerkId,
@@ -70,6 +65,7 @@ const adminOnly = requireRoles(['admin']);
 const farmersAndAdmin = requireRoles(['admin', 'farmer']);
 const authenticatedOnly = (req, res, next) => next();
 
+// ✅ Proper export
 module.exports = {
   authMiddleware,
   requireRoles,

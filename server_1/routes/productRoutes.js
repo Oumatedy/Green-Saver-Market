@@ -9,8 +9,10 @@ const {
   deleteProduct,
 } = require('../controllers/productController');
 
-const authMiddleware = require('../middlewares/authMiddleware');
-const adminMiddleware = require('../middlewares/adminMiddleware');
+const { authMiddleware, adminOnly } = require('../middlewares/authMiddleware');
+
+// const authMiddleware = require('../middlewares/authMiddleware');
+// const adminMiddleware = require('../middlewares/adminMiddleware');
 
 // Public routes
 router.get('/', getProducts);
