@@ -2,7 +2,7 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "node server/server.js",
     "dev": "nodemon server/server.js",
@@ -15,18 +15,24 @@
   "packageManager": "pnpm@10.12.4",
   "dependencies": {
     "@clerk/express": "^1.7.11",
+    "@socket.io/redis-adapter": "^8.3.0",
     "bcryptjs": "^3.0.2",
     "compression": "^1.8.1",
     "cors": "^2.8.5",
+    "csv-writer": "^1.6.0",
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
     "express-mongo-sanitize": "^2.2.0",
     "express-rate-limit": "^8.0.1",
+    "express-validator": "^7.2.1",
     "express-xss-sanitizer": "^2.0.0",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
+    "moment": "^2.30.1",
     "mongoose": "^8.16.4",
-    "morgan": "^1.10.1"
+    "morgan": "^1.10.1",
+    "redis": "^5.6.1",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"

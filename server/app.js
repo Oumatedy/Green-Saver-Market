@@ -15,19 +15,12 @@ const apiRouter = express.Router();
 /**
  * 1. Security Middlewares
  */
-// Set secure HTTP headers (CSP, HSTS, X-Frame-Options, etc.)
-app.use(helmet());
-
-// Sanitize request data to prevent NoSQL injection attacks
-app.use(mongoSanitize());
-
-// Sanitize against XSS attacks by cleaning user input
-app.use(xss());
+app.use(helmet()); // Secure HTTP headers
+app.use(mongoSanitize()); // Prevent NoSQL injection
+app.use(xss()); // Prevent XSS attacks
 
 /**
  * 2. CORS Configuration
- * Allow requests only from trusted frontend origin,
- * Credentials enabled for cookie/session support
  */
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
@@ -37,20 +30,18 @@ app.use(cors({
 }));
 
 /**
- * 3. Request Body Parsing
- * Parse JSON and URL-encoded bodies with size limits to prevent denial of service
+ * 3. Request Parsing
  */
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 /**
  * 4. Response Compression
- * Compress text responses like JSON, HTML etc. for faster client loads
  */
 app.use(compression());
 
 /**
- * 5. Request Logging - only in development for debugging
+ * 5. Logging (dev only)
  */
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -58,51 +49,51 @@ if (process.env.NODE_ENV === 'development') {
 
 /**
  * 6. Rate Limiting
- * Limit repeated requests to APIs to prevent brute force and DOS attacks
  */
 const limiter = rateLimit({
-  max: 100, // max requests per IP per hour
-  windowMs: 60 * 60 * 1000, // 1 hour window
+  max: 100,
+  windowMs: 60 * 60 * 1000, // 1 hour
   message: 'Too many requests from this IP, please try again after an hour!',
 });
 app.use('/api/', limiter);
 
 /**
- * 7. Clerk Middleware Integration
- * This middleware validates Clerk session tokens and attaches user info to every request.
- * Use `getAuth(req)` in routes/controllers to access authenticated user data (userId, sessionId, token)
+ * 7. Clerk Middleware
  */
 app.use(clerkMiddleware());
 
 /**
- * 8. API Routes setup with versioning prefix /api/v1
- * Routes are split by domain - products, orders, users, payments, messages
+ * 8. API Routes (/api/v1)
  */
-apiRouter.use('/products', require('./routes/productRoutes'));
-apiRouter.use('/orders', require('./routes/orderRoutes'));
-apiRouter.use('/users', require('./routes/userRoutes'));
-apiRouter.use('/payments', require('./routes/paymentRoutes'));
-apiRouter.use('/messages', require('./routes/messageRoutes'));
+const adminOrderRoutes = require('./routes/adminOrderRoute');
+apiRouter.use('/products', require('./routes/productRoute'));
+apiRouter.use('/orders', require('./routes/orderRoute'));
+apiRouter.use('/users', require('./routes/userRoute'));
+apiRouter.use('/payments', require('./routes/paymentRoute'));
+apiRouter.use('/messages', require('./routes/messageRoute'));
+apiRouter.use('/admin/orders', adminOrderRoutes);
 
-app.use('/api/v1', apiRouter);
-
-/**
- * 9. Sample protected route example to check authentication status
- * Returns userId if authenticated, 401 Unauthorized otherwise
- */
-app.get('/api/v1/profile', (req, res) => {
+// 🔐 Protected route example
+apiRouter.get('/profile', (req, res) => {
   const { userId } = getAuth(req);
-
   if (!userId) {
     return res.status(401).json({ message: 'Unauthorized - no user session found' });
   }
-
   res.json({ message: 'User authenticated', userId });
 });
 
+// Mount versioned API router
+app.use('/api/v1', apiRouter);
+
 /**
- * 10. Basic Health Check Endpoint
- * Useful for uptime monitors and load balancers
+ * 9. Error Handling
+ */
+const { notFound, errorHandler } = require('./middlewares/errorMiddleware');
+app.use(notFound);
+app.use(errorHandler);
+
+/**
+ * 10. Health Check
  */
 app.get('/health', (req, res) => {
   res.status(200).json({
