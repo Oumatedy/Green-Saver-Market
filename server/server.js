@@ -2,6 +2,14 @@
 const dotenv = require('dotenv');
 dotenv.config();
 
+// Debug: Check if Clerk keys are loaded
+console.log('=== ENVIRONMENT DEBUG ===');
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('PORT:', process.env.PORT);
+console.log('CLERK_PUBLISHABLE_KEY:', process.env.CLERK_PUBLISHABLE_KEY ? 'Loaded ✓' : 'Missing ✗');
+console.log('CLERK_SECRET_KEY:', process.env.CLERK_SECRET_KEY ? 'Loaded ✓' : 'Missing ✗');
+console.log('========================');
+
 // Core dependencies
 const mongoose = require('mongoose');   // Mongoose for MongoDB connection
 const app = require('./app');           // Express app with middleware and routes

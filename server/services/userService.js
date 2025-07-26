@@ -1,5 +1,5 @@
 const User = require('../models/userModel');
-const { BadRequestError, NotFoundError } = require('../utils/AppError');
+const { BadRequestError, NotFoundError } = require('../utils/appError');
 
 class UserService {
   /**

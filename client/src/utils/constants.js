@@ -1,5 +1,11 @@
 export const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
+export const ROLES = {
+  CUSTOMER: "customer",
+  FARMER: "farmer",
+  ADMIN: "admin",
+};
+
 export const PRODUCT_CATEGORIES = [
   'Vegetables',
   'Fruits',
@@ -7,7 +13,9 @@ export const PRODUCT_CATEGORIES = [
   'Meat',
   'Bakery',
   'Beverages',
-  'Snacks',
+  "Herbs",
+  "Grains",
+  "Other",
 ];
 
 export const ORDER_STATUS = {
@@ -34,4 +42,10 @@ export const ROUTES = {
   PROFILE: '/profile',
   LOGIN: '/login',
   REGISTER: '/register',
+};
+
+export const API_RESPONSE_MESSAGES = {
+  UNAUTHORIZED: "You are not authorized to perform this action.",
+  NOT_FOUND: "Requested resource not found.",
+  SERVER_ERROR: "An unexpected error occurred. Please try again later.",
 };

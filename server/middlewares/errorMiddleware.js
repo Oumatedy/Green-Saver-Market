@@ -1,4 +1,4 @@
-const { CustomError } = require('../utils/appError');
+const { AppError } = require('../utils/appError');
 
 /**
  * Middleware to catch all undefined routes (404 not found)
@@ -22,7 +22,7 @@ const errorHandler = (err, req, res, next) => {
   });
 
   // Handle custom application errors (your defined class)
-  if (err instanceof CustomError) {
+  if (err instanceof AppError) {
     return res.status(err.statusCode).json({
       success: false,
       message: err.message,

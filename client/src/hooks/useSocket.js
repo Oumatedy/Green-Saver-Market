@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import socketService from '../services/socketService';
+import socketService from '../Services/socketService';
 import { addMessage, updateUserStatus } from '../store/slices/chatSlice';
 import { updateOrderStatus } from '../store/slices/orderSlice';
 
@@ -45,7 +45,7 @@ export const useChat = (recipientId) => {
 
 export const useOrderUpdates = (orderId) => {
   const dispatch = useDispatch();
-  const orderStatus = useSelector(state => state.orders.items[orderId]?.status);
+  const orderStatus = useSelector(state => state.orders.items?.[orderId]?.status);
 
   useEffect(() => {
     if (orderId) {

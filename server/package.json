@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server/server.js",
+    "build": "node server.js",
     "dev": "nodemon server/server.js",
     "test": "jest --coverage",
     "lint": "eslint . --ext .js"
@@ -21,7 +22,7 @@
     "cors": "^2.8.5",
     "csv-writer": "^1.6.0",
     "dotenv": "^17.2.0",
-    "express": "^5.1.0",
+    "express": "^4.21.2",
     "express-mongo-sanitize": "^2.2.0",
     "express-rate-limit": "^8.0.1",
     "express-validator": "^7.2.1",

@@ -1,9 +1,8 @@
 const Product = require('../models/productModel');
 const { validationResult } = require('express-validator');
-const BaseController = require('./BaseController');
+const BaseController = require('../controllers/BaseController');
 
 class ProductController extends BaseController {
-
   // GET /api/v1/products
   async getProducts(req, res) {
     try {
@@ -21,11 +20,7 @@ class ProductController extends BaseController {
       const filter = {};
       if (category) filter.category = category;
       if (farmer) filter.farmerId = farmer;
-      
-      if (organic !== undefined) {
-        filter.organic = organic === 'true';
-      }
-
+      if (organic !== undefined) filter.organic = organic === 'true';
       if (search) {
         filter.$or = [
           { name: { $regex: search, $options: 'i' } },
@@ -36,7 +31,6 @@ class ProductController extends BaseController {
       const skip = (parseInt(page) - 1) * parseInt(limit);
       const sort = { [sortBy]: sortOrder === 'desc' ? -1 : 1 };
 
-      // Query products with pagination and populate farmer info
       const products = await Product.find(filter)
         .populate('farmerId', 'name email profile')
         .sort(sort)
@@ -55,8 +49,8 @@ class ProductController extends BaseController {
           pages: Math.ceil(total / parseInt(limit))
         }
       });
-
     } catch (error) {
+      console.error(error);
       this.fail(res, error);
     }
   }
@@ -68,13 +62,10 @@ class ProductController extends BaseController {
         .populate('farmerId', 'name email profile')
         .lean();
 
-      if (!product) {
-        return this.notFound(res, 'Product not found');
-      }
-
+      if (!product) return this.notFound(res, 'Product not found');
       this.ok(res, product);
-
     } catch (error) {
+      console.error(error);
       this.fail(res, error);
     }
   }
@@ -82,13 +73,11 @@ class ProductController extends BaseController {
   // POST /api/v1/products
   async createProduct(req, res) {
     try {
-      // Validate inputs
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return this.clientError(res, 'Validation errors, check your inputs');
+        return this.clientError(res, errors.array());
       }
 
-      // Attach farmerId from authenticated user 
       const productData = {
         ...req.body,
         farmerId: req.user.userId
@@ -96,12 +85,14 @@ class ProductController extends BaseController {
 
       const product = new Product(productData);
       await product.save();
-
       await product.populate('farmerId', 'name email profile');
 
-      this.created(res);
-      
+      this.created(res, {
+        message: 'Product created successfully',
+        product
+      });
     } catch (error) {
+      console.error(error);
       this.fail(res, error);
     }
   }
@@ -109,17 +100,14 @@ class ProductController extends BaseController {
   // PUT /api/v1/products/:id
   async updateProduct(req, res) {
     try {
-      // Validate inputs
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return this.clientError(res, 'Validation errors, check your inputs');
+        return this.clientError(res, errors.array());
       }
 
       const product = await Product.findById(req.params.id);
-
       if (!product) return this.notFound(res, 'Product not found');
 
-      // Authorization: Must be admin or product owner (farmer)
       if (req.user.role !== 'admin' && product.farmerId.toString() !== req.user.userId) {
         return this.forbidden(res, 'Not authorized to update this product');
       }
@@ -132,10 +120,10 @@ class ProductController extends BaseController {
 
       this.ok(res, {
         message: 'Product updated successfully',
-        product: updatedProduct,
+        product: updatedProduct
       });
-
     } catch (error) {
+      console.error(error);
       this.fail(res, error);
     }
   }
@@ -144,10 +132,8 @@ class ProductController extends BaseController {
   async deleteProduct(req, res) {
     try {
       const product = await Product.findById(req.params.id);
-
       if (!product) return this.notFound(res, 'Product not found');
 
-      // Authorization: Must be admin or product owner (farmer)
       if (req.user.role !== 'admin' && product.farmerId.toString() !== req.user.userId) {
         return this.forbidden(res, 'Not authorized to delete this product');
       }
@@ -155,13 +141,13 @@ class ProductController extends BaseController {
       await Product.findByIdAndDelete(req.params.id);
 
       this.ok(res, { message: 'Product deleted successfully' });
-
     } catch (error) {
+      console.error(error);
       this.fail(res, error);
     }
   }
 
-  // GET /api/v1/farmers/:farmerId/products or farmer dashboard
+  // GET /api/v1/farmers/:farmerId/products
   async getFarmerProducts(req, res) {
     try {
       const farmerId = req.params.farmerId || req.user.userId;
@@ -171,8 +157,8 @@ class ProductController extends BaseController {
         .lean();
 
       this.ok(res, products);
-
     } catch (error) {
+      console.error(error);
       this.fail(res, error);
     }
   }
@@ -187,7 +173,6 @@ class ProductController extends BaseController {
       }
 
       const product = await Product.findById(req.params.id);
-
       if (!product) return this.notFound(res, 'Product not found');
 
       product.stock = quantity;
@@ -196,14 +181,13 @@ class ProductController extends BaseController {
 
       this.ok(res, {
         message: 'Stock updated successfully',
-        product,
+        product
       });
-
     } catch (error) {
+      console.error(error);
       this.fail(res, error);
     }
   }
 }
 
-// Export singleton instance of controller
 module.exports = new ProductController();

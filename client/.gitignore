@@ -7,18 +7,66 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Environment
+.env
+.env.local
+.env.*.local
 
-# Editor directories and files
+# Node
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+build/
+.vite/
+coverage/
+.turbo/
+
+# Test outputs
+coverage/
+jest-cache/
+jest-config.js
+vitest-*.log
+
+# Test files (optional - usually you don’t ignore these)
+# *.test.{js,ts,jsx,tsx}
+# *.spec.{js,ts,jsx,tsx}
+
+# Tailwind cache
+.tailwind/
+
+# Editor/OS
+.DS_Store
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# TypeScript
+*.tsbuildinfo
+
+# Clerk
+.clerk/
+
+# PWA Artifacts
+*.webmanifest
+public/pwa-*.png
+service-worker.js
+workbox-*.js
+
+# CI/CD
+.vercel/
+.netlify/
+output/
+*.log
+*.pid
+
+# Optional
+.cache/
+.next/
+out/

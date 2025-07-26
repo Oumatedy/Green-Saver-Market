@@ -15,9 +15,19 @@ const apiRouter = express.Router();
 /**
  * 1. Security Middlewares
  */
+// Prevent NoSQL injection (safe configuration)
+app.use(mongoSanitize({
+  onSanitize: ({ req, key }) => {
+    console.warn(`This request[${key}] is sanitized`);
+  },
+}));
+
+
 app.use(helmet()); // Secure HTTP headers
-app.use(mongoSanitize()); // Prevent NoSQL injection
-app.use(xss()); // Prevent XSS attacks
+
+
+// Prevent XSS attacks
+app.use(xss());
 
 /**
  * 2. CORS Configuration
@@ -86,14 +96,24 @@ apiRouter.get('/profile', (req, res) => {
 app.use('/api/v1', apiRouter);
 
 /**
- * 9. Error Handling
+ * 9. Root Route (Optional for clarity)
+ */
+app.get('/', (req, res) => {
+  res.status(200).json({
+    message: 'Welcome to the Green Saver Market API',
+    docs: '/api/v1',
+  });
+});
+
+/**
+ * 10. Error Handling
  */
 const { notFound, errorHandler } = require('./middlewares/errorMiddleware');
 app.use(notFound);
 app.use(errorHandler);
 
 /**
- * 10. Health Check
+ * 11. Health Check
  */
 app.get('/health', (req, res) => {
   res.status(200).json({
@@ -102,5 +122,7 @@ app.get('/health', (req, res) => {
     uptime: process.uptime(),
   });
 });
+
+
 
 module.exports = app;

@@ -1,50 +1,76 @@
-import { useState, useEffect } from 'react';
-import { getOrders, getUserOrders, getOrderById } from '../services/api';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import * as apiService from '@/services/api';
 
-export const useOrders = (isAdmin = false) => {
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+export function useOrders(userId) {
+  return useQuery({
+    queryKey: ['orders', userId],
+    queryFn: () => apiService.getOrders(userId),
+    staleTime: 2 * 60 * 1000, // 2 minutes
+  });
+}
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const response = await (isAdmin ? getOrders() : getUserOrders());
-        setOrders(response.data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+export function useOrder(id) {
+  return useQuery({
+    queryKey: ['order', id],
+    queryFn: () => apiService.getOrder(id),
+    enabled: !!id,
+  });
+}
 
-    fetchOrders();
-  }, [isAdmin]);
+export function useCreateOrder() {
+  const queryClient = useQueryClient();
 
-  return { orders, loading, error };
-};
+  return useMutation({
+    mutationFn: (orderData) => apiService.createOrder(orderData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+    },
+  });
+}
 
-export const useOrder = (id) => {
-  const [order, setOrder] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+export function useUpdateOrderStatus() {
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const fetchOrder = async () => {
-      try {
-        const response = await getOrderById(id);
-        setOrder(response.data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  return useMutation({
+    mutationFn: ({ id, status }) => apiService.updateOrderStatus(id, status),
+    onSuccess: (_, { id }) => {
+      queryClient.invalidateQueries({ queryKey: ['order', id] });
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+    },
+  });
+}
 
-    if (id) {
-      fetchOrder();
-    }
-  }, [id]);
+// Custom hook for order statistics (for admin dashboard)
+export function useOrderStats() {
+  return useQuery({
+    queryKey: ['orderStats'],
+    queryFn: () => apiService.getOrders(), // Fetch all orders for stats
+    select: (data) => {
+      const orders = data?.orders || [];
 
-  return { order, loading, error };
-};
+      const totalOrders = orders.length;
+      const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
+
+      const statusCounts = orders.reduce((acc, order) => {
+        acc[order.status] = (acc[order.status] || 0) + 1;
+        return acc;
+      }, {});
+
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+      const recentOrders = orders.filter(
+        (order) => new Date(order.createdAt) > thirtyDaysAgo
+      );
+
+      return {
+        totalOrders,
+        totalRevenue,
+        statusCounts,
+        recentOrdersCount: recentOrders.length,
+        averageOrderValue: totalOrders > 0 ? totalRevenue / totalOrders : 0,
+      };
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+}

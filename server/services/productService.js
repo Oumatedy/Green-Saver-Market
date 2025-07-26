@@ -1,5 +1,5 @@
 const Product = require('../models/productModel');
-const { BadRequestError } = require('../utils/AppError');
+const { BadRequestError } = require('../utils/appError');
 
 /**
  * Service class for handling product operations
