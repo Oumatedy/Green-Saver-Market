@@ -163,7 +163,7 @@ coming soon.....
 
 ### Homepage / Hero Section
 
-![Homepage Screenshot](public/home.png)
+![Homepage Screenshot](client/public/home.png)
 
 ### Featured Products Section
 
