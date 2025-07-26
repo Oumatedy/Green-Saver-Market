@@ -9,6 +9,8 @@ Green Saver Market is a full-stack e-commerce web application dedicated to selli
 - Product catalog with filtering and search
 - User authentication and authorization (Clerk)
 - Admin dashboard for product and order management
+- Farmer dashboard
+- Customer dashboard
 - Real-time communication via Socket.io
 - Secure and sanitized API backend
 - Responsive and accessible UI built with React and Radix UI Toast components
@@ -155,13 +157,13 @@ Notifications about deals, orders, and tips for sustainability
 
 A walkthrough video demonstrating key features of the project:  
 
-[Insert your 5-10 minute video demo link here]
+coming soon.....
 
 ## 📸 Screenshots
 
 ### Homepage / Hero Section
 
-![](./screenshots/homepage and branding of Green Saver Market)*
+![Homepage Screenshot](public/home.png)
 
 ### Featured Products Section
 
