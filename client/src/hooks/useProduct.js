@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import * as apiService from '@/services/api';  // Change here
+import * as apiService from '@/services/api';  
 
 // Hook to fetch products with optional filters
 export function useProducts(filters) {
