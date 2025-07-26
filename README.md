@@ -199,7 +199,7 @@ Contributions and feedback are welcome! Please open issues and pull requests on 
 
 ## 📄 License
 
-MIT License © 2025 [Your Name / Organization]
+MIT License © 2025 Green Saver Market
 
 ## 📫 Contact
 
