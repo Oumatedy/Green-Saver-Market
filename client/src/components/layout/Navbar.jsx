@@ -25,9 +25,16 @@ export default function Navbar() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
-          <Leaf className="h-8 w-8 text-primary" />
-          <span className="text-xl font-bold text-primary">Green Saver Market</span>
+          <Leaf className="h-8 w-8 text-[#1B5E20]" />
+          <span className="text-xl font-bold text-[#1B5E20]">Green Saver Market</span>
         </Link>
+
+        {/* Navigation Links */}
+        <div className="hidden md:flex items-center space-x-6">
+          <Link to="/products" className="text-gray-600 hover:text-[#1B5E20]">Products</Link>
+          <Link to="/about" className="text-gray-600 hover:text-[#1B5E20]">About</Link>
+          <Link to="/contact" className="text-gray-600 hover:text-[#1B5E20]">Contact</Link>
+        </div>
 
         {/* Search Bar - Only for authenticated users */}
         <SignedIn>
@@ -37,7 +44,7 @@ export default function Navbar() {
               <input
                 type="text"
                 placeholder="Search fresh produce..."
-                className="w-full pl-10 pr-4 py-2 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full pl-10 pr-4 py-2 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-[#1B5E20]"
               />
             </div>
           </div>
@@ -46,6 +53,17 @@ export default function Navbar() {
         {/* Right side */}
         <div className="flex items-center space-x-4">
           <SignedIn>
+            {/* Navigation for authenticated users */}
+            <div className="hidden md:flex items-center space-x-4">
+              <Link to="/dashboard" className="text-gray-600 hover:text-[#1B5E20]">Dashboard</Link>
+              {userRole === 'farmer' && (
+                <Link to="/my-products" className="text-gray-600 hover:text-[#1B5E20]">My Products</Link>
+              )}
+              {userRole === 'admin' && (
+                <Link to="/admin" className="text-gray-600 hover:text-[#1B5E20]">Admin Panel</Link>
+              )}
+            </div>
+
             {/* Role Badge */}
             <Badge className={getRoleColor(userRole)}>
               {userRole.charAt(0).toUpperCase() + userRole.slice(1)}
@@ -54,10 +72,14 @@ export default function Navbar() {
             {/* Shopping Cart - Only for customers */}
             {userRole === 'customer' && (
               <Button variant="ghost" size="icon" className="relative">
-                <ShoppingCart className="h-5 w-5" />
-                <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs">
-                  {itemCount}
-                </Badge>
+                <Link to="/cart">
+                  <ShoppingCart className="h-5 w-5 text-gray-600 hover:text-[#1B5E20]" />
+                  {itemCount > 0 && (
+                    <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs bg-[#1B5E20]">
+                      {itemCount}
+                    </Badge>
+                  )}
+                </Link>
               </Button>
             )}
 
@@ -68,13 +90,19 @@ export default function Navbar() {
                   avatarBox: "h-8 w-8"
                 }
               }}
+              afterSignOutUrl="/"
             />
           </SignedIn>
 
           <SignedOut>
-            <Button variant="outline" asChild>
-              <Link to="/">Sign In</Link>
-            </Button>
+            <div className="flex items-center space-x-4">
+              <Button variant="ghost" asChild>
+                <Link to="/sign-in">Sign In</Link>
+              </Button>
+              <Button className="bg-[#1B5E20] hover:bg-[#2E7D32]" asChild>
+                <Link to="/sign-up">Get Started</Link>
+              </Button>
+            </div>
           </SignedOut>
         </div>
       </div>

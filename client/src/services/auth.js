@@ -1,23 +1,47 @@
-import apiClient from "./apiClient";
+import apiClient from './apiClient';
 
-export async function loginUser(credentials) {
-  // credentials = { email, password }
-  const response = await apiClient.post("/auth/login", credentials);
-  return response.data;
-}
+export const authService = {
+  // Initialize user session
+  async initializeSession(clerkUser) {
+    try {
+      const token = await clerkUser.getToken();
+      localStorage.setItem('accessToken', token);
+      
+      // Send user data to backend to create/update user
+      const response = await apiClient.post('/users/initialize', {
+        clerkId: clerkUser.id,
+        email: clerkUser.emailAddresses[0].emailAddress,
+        firstName: clerkUser.firstName,
+        lastName: clerkUser.lastName,
+        imageUrl: clerkUser.imageUrl
+      });
+      
+      return response.data;
+    } catch (error) {
+      console.error('Failed to initialize session:', error);
+      throw error;
+    }
+  },
 
-export async function registerUser(userInfo) {
-  // userInfo = { name, email, password, role, ...}
-  const response = await apiClient.post("/auth/register", userInfo);
-  return response.data;
-}
+  // Get current user profile
+  async getCurrentUser() {
+    try {
+      const response = await apiClient.get('/users/me');
+      return response.data;
+    } catch (error) {
+      console.error('Failed to get current user:', error);
+      throw error;
+    }
+  },
 
-export async function logoutUser() {
-  const response = await apiClient.post("/auth/logout");
-  return response.data;
-}
-
-export async function getCurrentUser() {
-  const response = await apiClient.get("/auth/me");
-  return response.data;
-}
+  // Get authentication status
+  async checkAuth() {
+    try {
+      const response = await apiClient.get('/auth/me');
+      return response.data;
+    } catch (error) {
+      console.error('Failed to check auth status:', error);
+      throw error;
+    }
+  }
+};

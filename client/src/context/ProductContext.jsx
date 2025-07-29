@@ -1,52 +1,32 @@
-import { createContext, useContext, useReducer } from 'react';
-
-// Action types
-const PRODUCT_ACTIONS = {
-  SET_LOADING: 'SET_LOADING',
-  SET_PRODUCTS: 'SET_PRODUCTS',
-  SET_ERROR: 'SET_ERROR',
-  CLEAR_ERROR: 'CLEAR_ERROR',
-};
-
-const initialState = {
-  products: [],
-  loading: false,
-  error: null,
-};
+import { createContext, useContext } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { getProducts } from '@/services/api';
 
 const ProductContext = createContext();
-
-const productReducer = (state, action) => {
-  switch (action.type) {
-    case PRODUCT_ACTIONS.SET_LOADING:
-      return { ...state, loading: true };
-
-    case PRODUCT_ACTIONS.SET_PRODUCTS:
-      return {
-        ...state,
-        loading: false,
-        products: action.payload,
-        error: null,
-      };
-
-    case PRODUCT_ACTIONS.SET_ERROR:
-      return { ...state, loading: false, error: action.payload };
-
-    case PRODUCT_ACTIONS.CLEAR_ERROR:
-      return { ...state, error: null };
-
-    default:
-      return state;
-  }
-};
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      cacheTime: 10 * 60 * 1000, // 10 minutes
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 export const ProductProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(productReducer, initialState);
+  const contextValue = {
+    queryClient,
+    invalidateProducts: () => queryClient.invalidateQueries(['products']),
+    prefetchProducts: () => queryClient.prefetchQuery(['products'], () => getProducts()),
+  };
 
   return (
-    <ProductContext.Provider value={{ state, dispatch }}>
-      {children}
-    </ProductContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      <ProductContext.Provider value={contextValue}>
+        {children}
+      </ProductContext.Provider>
+    </QueryClientProvider>
   );
 };
 
@@ -57,6 +37,3 @@ export const useProductContext = () => {
   }
   return context;
 };
-
-// Optional: Export actions for cleaner dispatch usage
-export { PRODUCT_ACTIONS };

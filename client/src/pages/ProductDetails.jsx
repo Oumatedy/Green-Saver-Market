@@ -2,10 +2,9 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Star, ShoppingCart, Heart, Truck, Shield } from 'lucide-react';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
+
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -38,8 +37,6 @@ export default function ProductDetails() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
-      
       <main className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Product Images */}
@@ -204,8 +201,6 @@ export default function ProductDetails() {
           </Card>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

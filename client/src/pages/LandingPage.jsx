@@ -3,13 +3,10 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Leaf, Truck, Users, Shield, ArrowRight, Star } from 'lucide-react';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <div className="bg-background">
       
       {/* Hero Section */}
       <section className="relative py-24 px-4 bg-[#F5F7F5]">
@@ -148,8 +145,6 @@ export default function LandingPage() {
           </Button>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 }

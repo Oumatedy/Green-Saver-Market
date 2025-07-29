@@ -20,6 +20,7 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+// Helper function for form data handling
 function buildProductFormData(data) {
   const formData = new FormData();
 
@@ -46,22 +47,57 @@ function buildProductFormData(data) {
   return formData;
 }
 
-// Product APIs
-export const getProducts = (params) => api.get('/products', { params });
-export const getProductById = (id) => api.get(`/products/${id}`);
-export const createProduct = (data) => {
-  const formData = buildProductFormData(data);
-  return api.post('/products', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  });
+// Product API endpoints with error handling and response unwrapping
+export const getProducts = async (params = {}) => {
+  try {
+    const response = await api.get('/products', { params });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { message: error.message };
+  }
 };
-export const updateProduct = (id, data) => {
-  const formData = buildProductFormData(data);
-  return api.put(`/products/${id}`, formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  });
+
+export const getProductById = async (id) => {
+  try {
+    const response = await api.get(`/products/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { message: error.message };
+  }
 };
-export const deleteProduct = (id) => api.delete(`/products/${id}`);
+
+export const createProduct = async (data) => {
+  try {
+    const formData = buildProductFormData(data);
+    const response = await api.post('/products', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { message: error.message };
+  }
+};
+
+export const updateProduct = async (id, data) => {
+  try {
+    const formData = buildProductFormData(data);
+    const response = await api.put(`/products/${id}`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { message: error.message };
+  }
+};
+
+export const deleteProduct = async (id) => {
+  try {
+    const response = await api.delete(`/products/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { message: error.message };
+  }
+};
 export const addProductReview = (productId, data) => {
   const formData = new FormData();
   if (data.images?.length) {

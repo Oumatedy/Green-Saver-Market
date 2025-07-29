@@ -3,8 +3,6 @@ import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
 
 export default function Contact() {
   const handleSubmit = (e) => {
@@ -13,8 +11,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <div className="bg-background">
       
       {/* Hero Section */}
       <section className="relative py-16 bg-[#F5F7F5]">
@@ -167,8 +164,6 @@ export default function Contact() {
           </div>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 }

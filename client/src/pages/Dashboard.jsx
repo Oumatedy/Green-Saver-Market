@@ -1,9 +1,8 @@
 import { useUser } from '@clerk/clerk-react';
 import { useSearchParams } from 'react-router-dom';
-import CustomerDashboard from '@/components/dashboard/CustomerDashboard';
-import FarmerDashboard from '@/components/dashboard/FarmerDashboard';
-import AdminDashboard from '@/components/dashboard/AdminDashboard';
-import Navbar from '@/components/layout/Navbar';
+import CustomerDashboard from '../components/dashboards/CustomerDashboard';
+import FarmerDashboard from '../components/dashboards/FarmerDashboard';
+import AdminDashboard from '../components/dashboards/AdminDashboard';
 
 export default function Dashboard() {
   const { user, isLoaded } = useUser();
