@@ -205,5 +205,5 @@ MIT License © 2025 Green Saver Market
 
 ## 📫 Contact
 
-For questions or feedback, reach out at [youremail@example.com](mailto:oumatedy@example.com)
+For questions or feedback, reach out at oumatedy@gmail.com
 
