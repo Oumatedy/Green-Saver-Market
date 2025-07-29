@@ -7,9 +7,6 @@ import { Analytics } from "@vercel/analytics/react";
 import { ProductProvider } from "./context/ProductContext";
 import { OrderProvider } from "./context/OrderContext";
 
-import Header from "./components/Layout/Header";
-import Footer from "./components/Layout/Footer";
-
 import LandingPage from "./pages/LandingPage";
 import ProductDetails from "./pages/ProductDetails";
 import OrderDetails from "./pages/OrderDetails";
@@ -39,7 +36,6 @@ function App() {
             <OrderProvider>
               <Router>
                 <div className="min-h-screen flex flex-col">
-                  <Header />
                   <main className="flex-grow">
                     <Routes>
                       <Route path="/" element={<LandingPage />} />
@@ -53,7 +49,6 @@ function App() {
                       {/* Add additional custom routes here */}
                     </Routes>
                   </main>
-                  <Footer />
                 </div>
               </Router>
             </OrderProvider>

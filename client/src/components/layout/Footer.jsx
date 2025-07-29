@@ -66,7 +66,7 @@ export default function Footer() {
             <div className="space-y-2">
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                 <Mail className="h-4 w-4" />
-                <span>support@greensaver.com</span>
+                <span>support@greensaver.com, info@greensaver.com</span>
               </div>
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                 <Phone className="h-4 w-4" />
@@ -74,14 +74,14 @@ export default function Footer() {
               </div>
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4" />
-                <span>123 Green Street, Farm City</span>
+                <span>1234 Green Street, Farm City</span>
               </div>
             </div>
           </div>
         </div>
 
         <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
-          <p>&copy; 2024 Green Saver Market. All rights reserved.</p>
+          <p>&copy; 2025 Green Saver Market. All rights reserved.</p>
         </div>
       </div>
     </footer>

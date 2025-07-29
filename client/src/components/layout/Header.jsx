@@ -26,7 +26,7 @@ export default function Header() {
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
           <Leaf className="h-8 w-8 text-primary" />
-          <span className="text-xl font-bold text-primary">Green Saver Market</span>
+          <span className="text-xl font-bold text-green-600 text-primary">Green Saver Market</span>
         </Link>
 
         {/* Navigation */}

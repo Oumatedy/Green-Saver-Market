@@ -2,11 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Leaf, Truck, Users, Shield, ArrowRight, Star } from 'lucide-react'
+import { Leaf, Truck, Users, Shield, ArrowRight, Star } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { useProducts } from './client/src/hooks/useProduct';
-import ProductCard from './client/src/components/ProductCard';
 
 export default function LandingPage() {
   return (
@@ -17,7 +15,7 @@ export default function LandingPage() {
       <section className="relative py-20 px-4 bg-gradient-to-br from-primary/10 to-secondary/10">
         <div className="container mx-auto text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 text-foreground">
-            Fresh From Farm to Your Table
+            <span className="block text-green-600">Fresh From Farm to Your Table</span>
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto">
             Connect directly with local farmers and enjoy the freshest, most sustainable produce delivered to your door.

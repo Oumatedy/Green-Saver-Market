@@ -1,0 +1,129 @@
+{
+  "info": {
+    "name": "Green Saver Market API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/products",
+            "headers": {
+              "Authorization": "Bearer {{AUTH_TOKEN}}"
+            }
+          }
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "url": "{{BASE_URL}}/products",
+            "headers": {
+              "Authorization": "Bearer {{AUTH_TOKEN}}",
+              "Content-Type": "application/json"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": {
+                "name": "Organic Tomatoes",
+                "description": "Fresh organic tomatoes from local farms",
+                "price": 2.99,
+                "category": "vegetables",
+                "quantity": 100,
+                "organic": true,
+                "location": {
+                  "type": "Point",
+                  "coordinates": [-73.935242, 40.730610]
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Get User Orders",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/orders",
+            "headers": {
+              "Authorization": "Bearer {{AUTH_TOKEN}}"
+            }
+          }
+        },
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "url": "{{BASE_URL}}/orders",
+            "headers": {
+              "Authorization": "Bearer {{AUTH_TOKEN}}",
+              "Content-Type": "application/json"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": {
+                "items": [
+                  {
+                    "productId": "product_id_here",
+                    "quantity": 2
+                  }
+                ],
+                "shippingAddress": {
+                  "street": "123 Main St",
+                  "city": "New York",
+                  "state": "NY",
+                  "zipCode": "10001",
+                  "country": "USA"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Get All Orders",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/admin/orders",
+            "headers": {
+              "Authorization": "Bearer {{AUTH_TOKEN}}"
+            }
+          }
+        },
+        {
+          "name": "Export Orders",
+          "request": {
+            "method": "POST",
+            "url": "{{BASE_URL}}/admin/orders/export",
+            "headers": {
+              "Authorization": "Bearer {{AUTH_TOKEN}}",
+              "Content-Type": "application/json"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": {
+                "format": "csv",
+                "dateRange": {
+                  "startDate": "2025-01-01",
+                  "endDate": "2025-12-31"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
