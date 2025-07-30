@@ -27,7 +27,8 @@ import Register from "./pages/Register";
 import CustomerDashboard from "./pages/dashboards/CustomerDashboard";
 import FarmerDashboard from "./pages/dashboards/FarmerDashboard";
 import AdminDashboard from "./pages/dashboards/AdminDashboard";
-import NotFoundPage from "./pages/NotFoundPage";
+// import NotFoundPage from "./pages/NotFoundPage";
+import NotFoundPage from "./pages/NotFoundpage";
 import AuthLanding from "./components/auth/AuthLanding";
 
 // Feature Pages & Components
