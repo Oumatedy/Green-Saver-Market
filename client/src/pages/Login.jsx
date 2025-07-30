@@ -14,8 +14,8 @@ const Login = () => {
           </p>
         </div>
         <SignIn
-          routing="path"
-          path="/login"
+          routing="hash"
+          afterSignInUrl="/products"
           redirectUrl="/products"
           appearance={{
             elements: {

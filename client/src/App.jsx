@@ -20,6 +20,7 @@ import Layout from "./components/layout/Layout";
 
 // Pages
 import LandingPage from "./pages/LandingPage";
+import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -61,6 +62,7 @@ function AppContent() {
       <Route element={<Layout />}>
         {/* Public Routes */}
           <Route path="/" element={<LandingPage />} />
+          <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           
           {/* Auth Routes */}
@@ -89,7 +91,13 @@ function AppContent() {
 
 function App() {
   return (
-    <ClerkProvider publishableKey={clerkPubKey}>
+    <ClerkProvider 
+      publishableKey={clerkPubKey}
+      navigate={(to) => {
+        console.log("Navigating to:", to);
+        window.location.href = to;
+      }}
+    >
       <Router>
         <QueryClientProvider client={queryClient}>
           <TooltipProvider>

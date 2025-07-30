@@ -14,8 +14,8 @@ const Register = () => {
           </p>
         </div>
         <SignUp
-          routing="path"
-          path="/register"
+          routing="hash"
+          afterSignUpUrl="/products"
           redirectUrl="/products"
           appearance={{
             elements: {
