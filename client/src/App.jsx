@@ -38,10 +38,6 @@ import OrderList from "./containers/OrderList";
 import OrderDetails from "./pages/OrderDetails";
 import UserProfile from "./components/UserProfile";
 
-// Initialize QueryClient
-const queryClient = new QueryClient();
-const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-
 function AppContent() {
   const { isLoaded, user, isSignedIn } = useUser();
   const [userRole, setUserRole] = useState(null);
@@ -134,9 +130,11 @@ function AppContent() {
 }
 
 function App() {
+  const queryClient = new QueryClient();
+
   return (
     <ClerkProvider 
-      publishableKey={clerkPubKey}
+      publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}
       navigate={(to) => {
         console.log("Navigating to:", to);
         window.location.href = to;
