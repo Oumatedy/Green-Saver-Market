@@ -4,7 +4,7 @@ const express = require('express');
 const { body, param, query } = require('express-validator');
 const router = express.Router();
 
-const productController = require('../controllers/productController');
+const productController = require('../controllers/ProductController');
 const { authMiddleware, adminOnly } = require('../middlewares/authMiddleware');
 const { validate } = require('../middlewares/validationMiddleware');
 

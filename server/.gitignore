@@ -82,3 +82,7 @@ debug/
 config/*.json
 !config/default.json
 !config/example.json
+
+# Render deployment config
+render.yaml
+*.render.yaml
