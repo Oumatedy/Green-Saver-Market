@@ -7,6 +7,7 @@ const ProductList = () => {
   const { data: products = [], isLoading, error } = useQuery({
     queryKey: ['products'],
     queryFn: () => getProducts(),
+    select: (data) => Array.isArray(data) ? data : [],
   });
 
   if (isLoading) {

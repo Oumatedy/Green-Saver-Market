@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -51,8 +51,10 @@ function buildProductFormData(data) {
 export const getProducts = async (params = {}) => {
   try {
     const response = await api.get('/products', { params });
-    return response.data;
+    // Ensure we return the products array, not the entire response
+    return response.data.data || response.data.products || [];
   } catch (error) {
+    console.error('Error fetching products:', error);
     throw error.response?.data || { message: error.message };
   }
 };

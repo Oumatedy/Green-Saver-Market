@@ -31,9 +31,9 @@ export default function Navbar() {
 
         {/* Navigation Links */}
         <div className="hidden md:flex items-center space-x-6">
-          <Link to="/products" className="text-gray-600 hover:text-[#1B5E20]">Products</Link>
-          <Link to="/about" className="text-gray-600 hover:text-[#1B5E20]">About</Link>
-          <Link to="/contact" className="text-gray-600 hover:text-[#1B5E20]">Contact</Link>
+          <Link to="/products" className="text-black-600 hover:text-[#1B5E20]">Products</Link>
+          <Link to="/about" className="text-black-600 hover:text-[#1B5E20]">About</Link>
+          <Link to="/contact" className="text-black-600 hover:text-[#1B5E20]">Contact</Link>
         </div>
 
         {/* Search Bar - Only for authenticated users */}
