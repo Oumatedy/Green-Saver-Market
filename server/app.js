@@ -8,9 +8,24 @@ const { xss } = require('express-xss-sanitizer');
 const rateLimit = require('express-rate-limit');
 const { clerkMiddleware, getAuth } = require('@clerk/express');
 const { notFound, errorHandler } = require('./middlewares/errorMiddleware');
+const path = require('path');
 
 // Load environment variables
 require('dotenv').config();
+
+// Create Express app
+const app = express();
+
+// Configure CORS
+const corsOrigins = process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',') : [];
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? process.env.CLIENT_URL 
+    : corsOrigins,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Debug: Verify Clerk keys are loaded
 console.log('=== CLERK CONFIGURATION DEBUG ===');
@@ -18,8 +33,8 @@ console.log('CLERK_PUBLISHABLE_KEY:', process.env.CLERK_PUBLISHABLE_KEY ? 'Loade
 console.log('CLERK_SECRET_KEY:', process.env.CLERK_SECRET_KEY ? 'Loaded ✓' : 'Missing ✗');
 console.log('===================================');
 
-// Initialize express app
-const app = express();
+// Health check route (no auth required)
+app.use('/api/v1/health', require('./routes/healthRoute'));
 
 /**
  * 1. Security Middlewares (Applied before other middlewares)
@@ -175,6 +190,14 @@ apiRouter.get('/test', (req, res) => {
 
 // Mount the API router
 app.use('/api/v1', apiRouter);
+
+/**
+ * Serve frontend static files
+ */
+app.use(express.static(path.join(__dirname, '../client/dist')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+});
 
 /**
  * 10. Error Handling Middleware (Must be last)

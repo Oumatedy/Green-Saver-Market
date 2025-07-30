@@ -4,16 +4,36 @@ import { getProducts } from '../services/api';
 import ProductCard from '../components/ProductCard';
 
 const ProductList = () => {
-  const { data: products = [], isLoading, error } = useQuery({
+  const { data: products = [], isLoading, error, isError } = useQuery({
     queryKey: ['products'],
     queryFn: () => getProducts(),
     select: (data) => Array.isArray(data) ? data : [],
+    retry: 1,
+    onError: (error) => {
+      console.error('Error fetching products:', error);
+    }
   });
 
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <div className="text-red-500 mb-4">
+          Failed to load products. {error?.message || 'Please try again later.'}
+        </div>
+        <button
+          onClick={() => queryClient.invalidateQueries(['products'])}
+          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+        >
+          Retry
+        </button>
       </div>
     );
   }

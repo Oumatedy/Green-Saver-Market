@@ -141,7 +141,7 @@ export default function LandingPage() {
             className="bg-white text-[#1B5E20] hover:bg-[#E8F5E9] transition-colors duration-300 px-8 py-3 text-base shadow-lg hover:shadow-xl"
             asChild
           >
-            <Link to="/sign-up">Get Started Today</Link>
+            <Link to="/auth">Get Started Today</Link>
           </Button>
         </div>
       </section>

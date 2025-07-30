@@ -5,6 +5,27 @@
 
 const mongoose = require('mongoose');
 
+// MongoDB connection options
+const connectOptions = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 5000,
+  retryWrites: true
+};
+
+// Connect to MongoDB
+const connectToDatabase = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI, connectOptions);
+  } catch (error) {
+    console.error('❌ Failed to connect to MongoDB:', error);
+    process.exit(1);
+  }
+};
+
+// Export the connection function
+module.exports = { connectToDatabase };
+
 // Log when successfully connected to MongoDB
 mongoose.connection.on('connected', () => {
   console.log('✅ MongoDB connection established');
@@ -31,34 +52,3 @@ process.on('SIGINT', async () => {
     process.exit(1);
   }
 });
-
-/**
- * Connect to MongoDB with options optimized for production and dev use.
- * Reads MONGODB_URI from environment (.env).
- */
-const connectDB = async () => {
-  try {
-    const mongoURI =
-      process.env.NODE_ENV === 'production'
-        ? process.env.MONGODB_URI_PROD || process.env.MONGODB_URI
-        : process.env.MONGODB_URI;
-
-    if (!mongoURI) {
-      throw new Error('MongoDB connection string (MONGODB_URI) is missing in environment variables');
-    }
-
-    await mongoose.connect(mongoURI, {
-      useNewUrlParser: true,       // Use MongoDB driver's new connection string parser
-      useUnifiedTopology: true,    // Use the new Server Discover and Monitoring engine
-      maxPoolSize: 10,             // Maintain up to 10 socket connections in pool
-      serverSelectionTimeoutMS: 5000,  // Keep trying to send operations for 5 seconds after failing to connect
-      socketTimeoutMS: 45000,           // Close sockets after 45s inactivity
-    });
-
-  } catch (error) {
-    console.error('❌ MongoDB connection error:', error);
-    process.exit(1);
-  }
-};
-
-module.exports = { connectDB };

@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { ClerkProvider, useUser } from "@clerk/clerk-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -13,7 +13,7 @@ import { CartProvider } from "./context/CartContext";
 
 // Auth
 import { authService } from "./services/auth";
-import ProtectedRoute from "./components/auth/ProtectedRoute";
+import ProtectedRoute, { AuthRedirect } from "./components/auth/ProtectedRoute";
 
 // Layout Components
 import Layout from "./components/layout/Layout";
@@ -24,8 +24,11 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
+import CustomerDashboard from "./pages/dashboards/CustomerDashboard";
+import FarmerDashboard from "./pages/dashboards/FarmerDashboard";
+import AdminDashboard from "./pages/dashboards/AdminDashboard";
 import NotFoundPage from "./pages/NotFoundPage";
+import AuthLanding from "./components/auth/AuthLanding";
 
 // Feature Pages & Components
 import ProductList from "./containers/ProductList";
@@ -39,17 +42,31 @@ const queryClient = new QueryClient();
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 function AppContent() {
-  const { isLoaded, user } = useUser();
+  const { isLoaded, user, isSignedIn } = useUser();
+  const [userRole, setUserRole] = useState(null);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    if (isLoaded && user) {
-      // Initialize user session when Clerk user is loaded
-      authService.initializeSession(user)
-        .catch(console.error);
+    async function initializeUser() {
+      if (isLoaded && isSignedIn && user) {
+        try {
+          // Initialize user session when Clerk user is loaded
+          const userData = await authService.initializeSession(user);
+          setUserRole(userData.role);
+          setIsInitialized(true);
+        } catch (error) {
+          console.error('Failed to initialize user:', error);
+          setIsInitialized(true);
+        }
+      } else if (isLoaded && !isSignedIn) {
+        setIsInitialized(true);
+      }
     }
-  }, [isLoaded, user]);
 
-  if (!isLoaded) {
+    initializeUser();
+  }, [isLoaded, isSignedIn, user]);
+
+  if (!isLoaded || !isInitialized) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -61,29 +78,55 @@ function AppContent() {
     <Routes>
       <Route element={<Layout />}>
         {/* Public Routes */}
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          
-          {/* Auth Routes */}
-          <Route path="/sign-in/*" element={<Login />} />
-          <Route path="/sign-up/*" element={<Register />} />
-          <Route path="/sso-callback" element={<Login />} />
-          
-          {/* Public Product Routes */}
-          <Route path="/products" element={<ProductList />} />
-          <Route path="/products/:id" element={<ProductDetails />} />
-          
-          {/* Protected Routes */}
-          <Route element={<ProtectedRoute />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/orders" element={<OrderList />} />
-            <Route path="/orders/:id" element={<OrderDetails />} />
-            <Route path="/profile" element={<UserProfile />} />
-          </Route>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        
+        {/* Auth Routes */}
+        <Route path="/auth" element={<AuthLanding />} />
+        <Route path="/sign-in/*" element={<Login />} />
+        <Route path="/sign-up/*" element={<Register />} />
+        <Route path="/sso-callback" element={<Login />} />
+        
+        {/* Protected Customer Routes */}
+        <Route
+          path="/dashboard/customer/*"
+          element={
+            <ProtectedRoute allowedRoles={['customer']}>
+              <CustomerDashboard />
+            </ProtectedRoute>
+          }
+        />
 
-          {/* 404 Route */}
-          <Route path="*" element={<NotFoundPage />} />
+        {/* Protected Farmer Routes */}
+        <Route
+          path="/dashboard/farmer/*"
+          element={
+            <ProtectedRoute allowedRoles={['farmer']}>
+              <FarmerDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Protected Admin Routes */}
+        <Route
+          path="/dashboard/admin/*"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Dashboard Redirect */}
+        <Route path="/dashboard" element={<AuthRedirect />} />
+        
+        {/* Public Product Routes */}
+        <Route path="/products" element={<ProductList />} />
+        <Route path="/products/:id" element={<ProductDetails />} />
+
+        {/* 404 Route */}
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
   );
@@ -98,7 +141,7 @@ function App() {
         window.location.href = to;
       }}
     >
-      <Router>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <QueryClientProvider client={queryClient}>
           <TooltipProvider>
             <CartProvider>

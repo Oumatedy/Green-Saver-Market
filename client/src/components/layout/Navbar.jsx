@@ -95,14 +95,13 @@ export default function Navbar() {
           </SignedIn>
 
           <SignedOut>
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" asChild>
-                <Link to="/sign-in">Sign In</Link>
-              </Button>
-              <Button className="bg-[#1B5E20] hover:bg-[#2E7D32]" asChild>
-                <Link to="/sign-up">Get Started</Link>
-              </Button>
-            </div>
+            <Button 
+              variant="outline" 
+              className="border-[#1B5E20] text-[#1B5E20] hover:bg-[#1B5E20] hover:text-white transition-all duration-300"
+              asChild
+            >
+              <Link to="/auth">Sign In</Link>
+            </Button>
           </SignedOut>
         </div>
       </div>
