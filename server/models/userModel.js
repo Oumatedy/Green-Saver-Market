@@ -1,38 +1,45 @@
 /**
- * User schema including roles, profiles, preferences, location (geospatial),
- * business details, and ratings. Supports Clerk integration via clerkId.
+ * User schema definition for the Green Saver Market platform.
+ * This schema supports Clerk integration, geospatial queries for farmers,
+ * role-based access, ratings, business details, and more.
  */
 
 const mongoose = require('mongoose');
 
-// Define the GeoJSON Point schema for location field (used in geospatial queries)
+// Define a sub-schema for location using GeoJSON format
+// This enables support for geospatial queries using MongoDB's 2dsphere index
 const pointSchema = new mongoose.Schema({
   type: {
     type: String,
-    enum: ['Point'],
+    enum: ['Point'],          // Must always be "Point" for GeoJSON
     required: true,
     default: 'Point',
   },
   coordinates: {
-    type: [Number], // [longitude, latitude]
+    type: [Number],           // Format: [longitude, latitude]
     required: true,
     validate: {
       validator(value) {
-        // Coordinates must be an array of length 2: [lng, lat]
-        return Array.isArray(value) && value.length === 2 && value.every(coord => typeof coord === 'number');
+        return Array.isArray(value) &&
+               value.length === 2 &&
+               value.every(coord => typeof coord === 'number');
       },
       message: 'Coordinates must be an array of two numbers [longitude, latitude]',
     },
   },
-}, { _id: false });
+}, { _id: false }); // No separate _id for this sub-document
 
+// Define the main User schema
 const userSchema = new mongoose.Schema({
+  // Clerk authentication ID - must be unique
   clerkId: {
     type: String,
     required: true,
     unique: true,
-    index: true, // index for faster lookup by Clerk ID
+    index: true,
   },
+
+  // Primary contact info
   email: {
     type: String,
     required: true,
@@ -45,6 +52,8 @@ const userSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
+
+  // User's platform role
   role: {
     type: String,
     enum: ['customer', 'farmer', 'admin'],
@@ -52,6 +61,7 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
 
+  // User profile information (optional)
   profile: {
     phone: { type: String },
     address: {
@@ -61,10 +71,11 @@ const userSchema = new mongoose.Schema({
       country: { type: String },
       postalCode: { type: String },
     },
-    avatar: { type: String }, // URL to user avatar/profile image
-    bio: { type: String, maxlength: 500 },
+    avatar: { type: String },  // URL to avatar image
+    bio: { type: String, maxlength: 500 },  // Optional short bio
   },
 
+  // User preferences and settings
   preferences: {
     notifications: {
       email: { type: Boolean, default: true },
@@ -73,40 +84,47 @@ const userSchema = new mongoose.Schema({
     language: { type: String, default: 'en' },
   },
 
-  stripeCustomerId: { // For Stripe integration reference
+  // Stripe customer ID for payment tracking
+  stripeCustomerId: {
     type: String,
   },
 
+  // Account status: active, inactive, or suspended
   status: {
     type: String,
     enum: ['active', 'inactive', 'suspended'],
     default: 'active',
-    index: true, // indexed to filter active users efficiently
+    index: true,
   },
 
+  // Flexible metadata field for future extensibility
   metadata: {
     type: Map,
-    of: String, // flexible key-value metadata if needed
+    of: String,
   },
 
+  // Optional user location (mainly for farmers)
   location: {
     type: pointSchema,
-    index: '2dsphere', // geospatial index to enable location queries
-    required: false,   // optional - only for farmers or users who provide location
+    required: false, // Some users may not provide location
+    // DO NOT put `index: '2dsphere'` here to avoid duplication
   },
 
+  // User rating system (for farmers or vendors)
   ratings: {
     average: { type: Number, default: 0, min: 0, max: 5 },
     count: { type: Number, default: 0, min: 0 },
-    total: { type: Number, default: 0, min: 0 }, // sum of ratings (for easier recalculation)
+    total: { type: Number, default: 0, min: 0 }, // sum of ratings to recalculate average
   },
 
+  // Sales statistics for farmers/vendors
   totalSales: {
     type: Number,
     default: 0,
     min: 0,
   },
 
+  // Optional business details for farmers/vendors
   businessDetails: {
     businessName: { type: String },
     taxId: { type: String },
@@ -114,20 +132,19 @@ const userSchema = new mongoose.Schema({
     certifications: [{ type: String }],
   }
 }, {
-  timestamps: true, // Automatically manage createdAt and updatedAt
+  timestamps: true, // Adds createdAt and updatedAt fields automatically
 });
 
-
-// Geospatial index on location
+// Create a geospatial index on `location` for map-based features
 userSchema.index({ location: '2dsphere' });
 
-// Compound index to query top farmers: active status, sorted by rating and sales desc
-userSchema.index({ 
-  role: 1, 
-  status: 1, 
-  'ratings.average': -1, 
-  totalSales: -1
+// Compound index to help search for top-rated active farmers
+userSchema.index({
+  role: 1,
+  status: 1,
+  'ratings.average': -1,
+  totalSales: -1,
 });
 
-
+// Export the compiled User model
 module.exports = mongoose.model('User', userSchema);
