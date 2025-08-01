@@ -1,7 +1,7 @@
 import * as React from "react"
 import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils.js"
 import { toggleVariants } from "@/components/ui/toggle"
 
 // No need for VariantProps or types in JSX version

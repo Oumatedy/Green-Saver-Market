@@ -50,11 +50,27 @@ function buildProductFormData(data) {
 // Product API endpoints with error handling and response unwrapping
 export const getProducts = async (params = {}) => {
   try {
-    const response = await api.get('/products', { params });
-    // Ensure we return the products array, not the entire response
-    return response.data.data || response.data.products || [];
+    console.log('Fetching products from:', `${API_BASE_URL}/products`);
+    const response = await api.get('/products', { 
+      params,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log('Response:', response);
+    if (response.data && response.data.data && response.data.data.products) {
+      return response.data.data.products;
+    }
+    return [];
   } catch (error) {
     console.error('Error fetching products:', error);
+    console.error('Error details:', {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status,
+      config: error.config
+    });
     throw error.response?.data || { message: error.message };
   }
 };
