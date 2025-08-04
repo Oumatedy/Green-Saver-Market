@@ -150,7 +150,7 @@ Notifications about deals, orders, and tips for sustainability
 
 ## 🌐 Deployed Application
 
-- **Live app URL:** [https://green-saver-market.vercel.app/](https://green-saver-market.vercel.app/)  
+- **Live app URL:** https://green-saver-market.vercel.app/  
   
 
 ## 🎥 Video Demonstration
