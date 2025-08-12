@@ -2,19 +2,23 @@ import apiClient from './apiClient';
 
 export const authService = {
   // Initialize user session and handle role-based navigation
-  async initializeSession(clerkUser, role) {
+  async initializeSession(user, getToken) {
     try {
-      const token = await clerkUser.getToken();
+      // Get the token from Clerk session
+      const token = await getToken();
       localStorage.setItem('accessToken', token);
+      
+      // Get the selected role from localStorage or default to customer
+      const selectedRole = localStorage.getItem('selectedRole') || 'customer';
       
       // Send user data to backend to create/update user
       const response = await apiClient.post('/users/initialize', {
-        clerkId: clerkUser.id,
-        email: clerkUser.emailAddresses[0].emailAddress,
-        firstName: clerkUser.firstName,
-        lastName: clerkUser.lastName,
-        imageUrl: clerkUser.imageUrl,
-        role: role // Include selected role
+        clerkId: user.id,
+        email: user.primaryEmailAddress?.emailAddress,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        imageUrl: user.imageUrl,
+        role: selectedRole
       });
       
       // Store role in localStorage for quick access
@@ -23,6 +27,17 @@ export const authService = {
       return response.data;
     } catch (error) {
       console.error('Failed to initialize session:', error);
+      throw error;
+    }
+  },
+
+  // Get current user profile from our backend
+  async getCurrentUser() {
+    try {
+      const response = await apiClient.get('/users/me');
+      return response.data;
+    } catch (error) {
+      console.error('Failed to get current user:', error);
       throw error;
     }
   },
@@ -36,8 +51,6 @@ export const authService = {
     };
     return routes[role] || '/auth';
   },
-
-  // Get current user profile
   async getCurrentUser() {
     try {
       const response = await apiClient.get('/users/me');

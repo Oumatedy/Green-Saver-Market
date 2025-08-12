@@ -39,7 +39,7 @@ import OrderDetails from "./pages/OrderDetails";
 import UserProfile from "./components/UserProfile";
 
 function AppContent() {
-  const { isLoaded, user, isSignedIn } = useUser();
+  const { isLoaded, user, isSignedIn, getToken } = useUser();
   const [userRole, setUserRole] = useState(null);
   const [isInitialized, setIsInitialized] = useState(false);
 
@@ -47,8 +47,7 @@ function AppContent() {
     async function initializeUser() {
       if (isLoaded && isSignedIn && user) {
         try {
-          // Initialize user session when Clerk user is loaded
-          const userData = await authService.initializeSession(user);
+          const userData = await authService.initializeSession(user, getToken);
           setUserRole(userData.role);
           setIsInitialized(true);
         } catch (error) {
@@ -57,6 +56,7 @@ function AppContent() {
         }
       } else if (isLoaded && !isSignedIn) {
         setIsInitialized(true);
+        setUserRole(null);
       }
     }
 
@@ -89,7 +89,7 @@ function AppContent() {
         <Route
           path="/dashboard/customer/*"
           element={
-            <ProtectedRoute allowedRoles={['customer']}>
+            <ProtectedRoute allowedRoles={['customer']} userRole={userRole}> {/* Pass userRole */}
               <CustomerDashboard />
             </ProtectedRoute>
           }
@@ -99,7 +99,7 @@ function AppContent() {
         <Route
           path="/dashboard/farmer/*"
           element={
-            <ProtectedRoute allowedRoles={['farmer']}>
+            <ProtectedRoute allowedRoles={['farmer']} userRole={userRole}> {/* Pass userRole */}
               <FarmerDashboard />
             </ProtectedRoute>
           }
@@ -109,14 +109,14 @@ function AppContent() {
         <Route
           path="/dashboard/admin/*"
           element={
-            <ProtectedRoute allowedRoles={['admin']}>
+            <ProtectedRoute allowedRoles={['admin']} userRole={userRole}> {/* Pass userRole */}
               <AdminDashboard />
             </ProtectedRoute>
           }
         />
 
         {/* Dashboard Redirect */}
-        <Route path="/dashboard" element={<AuthRedirect />} />
+        <Route path="/dashboard" element={<AuthRedirect userRole={userRole} />} /> {/* Pass userRole */}
         
         {/* Public Product Routes */}
         <Route path="/products" element={<ProductList />} />
